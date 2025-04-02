@@ -1,25 +1,22 @@
-const express = require('express');
+// Firebase Admin SDK modülünü dahil et
+const admin = require('firebase-admin');
 const fs = require('fs');
-const firebase = require('firebase');
-require('firebase/database');
+const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Firebase yapılandırması
-const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY', // Firebase API anahtarınızı buraya ekleyin
-  authDomain: 'your-project-id.firebaseapp.com',
-  databaseURL: 'https://your-project-id.firebaseio.com',
-  projectId: 'your-project-id',
-  storageBucket: 'your-project-id.appspot.com',
-  messagingSenderId: 'sender-id',
-  appId: 'your-app-id'
-};
+// Firebase Admin SDK'yı başlatmak için serviceAccountKey'yi kullanmalısınız.
+// 'path/to/your/serviceAccountKey.json' yerine gerçek dosya yolunu yazmalısınız.
+var serviceAccount = require('./serviceAccountKey.json');
 
-// Firebase'i başlat
-firebase.initializeApp(firebaseConfig);
+// Firebase Admin SDK'yı başlat
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://express-form-project-default-rtdb.firebaseio.com' // Firebase Realtime Database URL
+});
 
-const db = firebase.database();
+// Firebase veritabanı bağlantısı
+const db = admin.database();
 
 // IP ve zaman loglama
 app.use((req, res, next) => {
@@ -65,18 +62,21 @@ app.post('/gonder', (req, res) => {
     ad: ad,
     mesaj: mesaj,
     zaman: zaman
-  });
-
-  // Log dosyasına yazma
-  const satir = `[${zaman}] Ad: ${ad}, Mesaj: ${mesaj}\n`;
-  fs.appendFile('mesajlar.txt', satir, (err) => {
-    if (err) {
-      console.error('Dosyaya yazılamadı:', err);
-      res.status(500).send('Sunucu hatası');
-    } else {
-      console.log('Mesaj dosyaya kaydedildi.');
-      res.send(`Teşekkürler, ${ad}! Mesajın alındı.`);
-    }
+  }).then(() => {
+    // Firebase'e başarılı veri ekledikten sonra log dosyasına yazma
+    const satir = `[${zaman}] Ad: ${ad}, Mesaj: ${mesaj}\n`;
+    fs.appendFile('mesajlar.txt', satir, (err) => {
+      if (err) {
+        console.error('Dosyaya yazılamadı:', err);
+        res.status(500).send('Sunucu hatası');
+      } else {
+        console.log('Mesaj dosyaya kaydedildi.');
+        res.send(`Teşekkürler, ${ad}! Mesajın alındı.`);
+      }
+    });
+  }).catch((error) => {
+    console.error('Firebase veritabanına kaydedilemedi:', error);
+    res.status(500).send('Veritabanı hatası');
   });
 });
 
