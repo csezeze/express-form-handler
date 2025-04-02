@@ -1,0 +1,47 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #e8f5e9; /* açık yeşil */
+  color: #2e7d32; /* koyu yeşil yazı */
+  padding: 40px;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(46, 125, 50, 0.2);
+}
+
+h1 {
+  color: #1b5e20;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #a5d6a7;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  background-color: #ffffff;
+}
+
+button {
+  background-color: #66bb6a; /* yeşil */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #43a047;
+}
