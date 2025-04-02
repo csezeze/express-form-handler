@@ -7,12 +7,13 @@ const port = process.env.PORT || 3000;
 
 // Firebase Admin SDK'yı başlatmak için serviceAccountKey'yi kullanmalısınız.
 // 'path/to/your/serviceAccountKey.json' yerine gerçek dosya yolunu yazmalısınız.
-var serviceAccount = require('./serviceAccountKey.json');
+var serviceAccount = require("path/to/serviceAccountKey.json"); 
 
 // Firebase Admin SDK'yı başlat
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://express-form-project-default-rtdb.firebaseio.com' // Firebase Realtime Database URL
+  databaseURL: "https://express-form-project-default-rtdb.firebaseio.com"
+ // Firebase Realtime Database URL
 });
 
 // Firebase veritabanı bağlantısı
