@@ -1,19 +1,22 @@
+require('dotenv').config();
+
 // Firebase Admin SDK modülünü dahil et
+
 const admin = require('firebase-admin');
 const fs = require('fs');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Firebase Admin SDK'yı başlatmak için serviceAccountKey'yi kullanmalısınız.
-// 'path/to/your/serviceAccountKey.json' yerine gerçek dosya yolunu yazmalısınız.
-var serviceAccount = require('./serviceAccountKey.json');
+//güvenlik için satır değişikliği
+var serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT_PATH);
 
 // Firebase Admin SDK'yı başlat
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://express-form-project-default-rtdb.firebaseio.com"
- // Firebase Realtime Database URL
+  databaseURL: process.env.FIREBASE_DATABASE_URL 
+	// güvenlik için değişiklik yapıldı. 
+	//Firebase Realtime Database URL
 });
 
 // Firebase veritabanı bağlantısı
